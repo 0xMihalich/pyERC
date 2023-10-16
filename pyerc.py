@@ -20,23 +20,23 @@ def erc_decoder(input_erc: str) -> str:
     fp_int, sp_int = unpack(">2I", input_erc)
 
 
-    def _reverse(x) -> int:
+    def _reverse(sp_int: int) -> int:
         "функция побитного сдвига"
 
-        reverse_second_part = 0
+        reverse_sp_int = 0
 
         for i in range(0, 32):
-            temp = x >> (31 - i)
+            temp = sp_int >> (31 - i)
             temp &= 1
             temp = temp << i
-            reverse_second_part |= temp
+            reverse_sp_int |= temp
 
-        return reverse_second_part
+        return reverse_sp_int
 
 
-    reverse_second_part = _reverse(x=sp_int)
+    sp_int = _reverse(sp_int)
 
-    xor = fp_int ^ reverse_second_part
+    xor = fp_int ^ sp_int
     ret = (xor - 0xE010A11) + 2**32
 
     return pack(">I", ret & 0xffffffff).hex().upper()
