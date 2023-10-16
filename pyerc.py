@@ -34,10 +34,7 @@ def erc_decoder(input_erc: str) -> str:
         return reverse_sp_int
 
 
-    sp_int = _reverse(sp_int)
-
-    xor = fp_int ^ sp_int
-    ret = (xor - 0xE010A11) + 2**32
+    ret = (fp_int ^ _reverse(sp_int)) - 0xe010a11
 
     return pack(">I", ret & 0xffffffff).hex().upper()
 
